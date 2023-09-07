@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    번호:<span id="uiNum"></span><br>
+    이름:<span id="uiName"></span><br>
+    아이디:<span id="uiId"></span><br>
+    비밀번호:<span id="uiPwd"></span><br>
+    <button onclick="location.href='/user-info-update.html'">수정</button>
+    <button onclick="deleteUser()">삭제</button>
+    <script>
+            const url=new URL(location.href);
+            const param=url.searchParams;
+            const uiNum=param.get('uiNum');
+
+            async function deleteUser(){
+                const res=await fetch(`http://localhost/user-infos/${uiNum}`,{method:'DELETE'});
+                //url 전체 -> 실행 도메인과 백엔드 도메인이 다를 경우
+                const isDelete=await res.text();
+                if(isDelete==='1'){
+                    alert('삭제 완!');
+                    location.href='/user-infos/html'; 
+                    //url 전체 x -> 실행 도메인과 백엔드 도메인이 같을 경우
+                }
+            }
+        window.addEventListener('load',async function(){
+            
+            const res=await fetch(`http://localhost/user-infos/${uiNum}`);
+            const userInfo=await res.json();
+            for(const key in userInfo){
+                if(document.querySelector(`#${key}`)){
+                    document.querySelector(`#${key}`).innerText=userInfo[key];
+                }
+            }
+            console.log(userInfo);
+        })
+    </script>
+</body>
+</html>

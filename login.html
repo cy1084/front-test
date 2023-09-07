@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //localStorage.setItem('msg','채영');
+        //location.href='/check.html';
+        async function login(){
+            const data={
+                uiId:document.querySelector('#uiId').value,
+                uiPwd:document.querySelector('#uiPwd').value
+            }
+            const json=JSON.stringify(data);
+            const res=await fetch('http://localhost/login',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json;charset=UTF-8'
+                },
+                body:json
+        });
+        const result=await res.text();
+        if(result){
+            const user=JSON.parse(result);
+            localStorage.setItem('token',user.token);
+            alert(`${user.uiName}님 반갑습니다.`);
+           
+        }else{
+            alert('아이디나 비밀번호를 확인해주세요.');
+        }
+    }
+    </script>
+</body>
+</html>
